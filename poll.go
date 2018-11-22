@@ -2,9 +2,11 @@ package main
 
 import (
 	"database/sql"
+	"voting-app/handlers"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
@@ -19,17 +21,11 @@ func main() {
 	migrate(db)
 
 	// Define the HTTP routes
-	e.GET("/polls", func(c echo.Context) error {
-		return c.JSON(200, "Get Polls")
-	})
+	e.File("/", "public/index.html")
 
-	e.PUT("/polls", func(c echo.Context) error {
-		return c.JSON(200, "Put Polls")
-	})
+	e.GET("/polls", handlers.GetPolls(db))
 
-	e.PUT("/polls/:id", func(c echo.Context) error {
-		return c.JSON(200, "UPDATE poll "+c.Param("id"))
-	})
+	e.PUT("/poll/:index", handlers.UpdatePoll(db))
 
 	// Start server
 	e.Logger.Fatal(e.Start(":9000"))

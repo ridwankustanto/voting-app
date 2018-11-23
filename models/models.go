@@ -2,7 +2,17 @@ package models
 
 import (
 	"database/sql"
+
+	pusher "github.com/pusher/pusher-http-go"
 )
+
+var client = pusher.Client{
+	AppId:   "655961",
+	Key:     "50aa1a6ab900a700ae4f",
+	Secret:  "f8035f7adb4c1a8ea655",
+	Cluster: "ap1",
+	Secure:  true,
+}
 
 // Poll struct for json object poll
 type Poll struct {
@@ -71,5 +81,13 @@ func UpdatePoll(db *sql.DB, index int, name string, upvotes int, downvotes int) 
 		panic(err2)
 	}
 
+	pollUpdate := Poll{
+		ID:        index,
+		Name:      name,
+		Upvotes:   upvotes,
+		Downvotes: downvotes,
+	}
+
+	client.Trigger("poll-channel", "poll-update", pollUpdate)
 	return result.RowsAffected()
 }

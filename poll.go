@@ -28,7 +28,7 @@ func main() {
 	e.PUT("/poll/:index", handlers.UpdatePoll(db))
 
 	// Start server
-	e.Logger.Fatal(e.Start(":9000"))
+	e.Logger.Fatal(e.Start(":9090"))
 }
 
 func initDB(filepath string) *sql.DB {

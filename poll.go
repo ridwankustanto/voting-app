@@ -31,6 +31,7 @@ func main() {
 	e.Logger.Fatal(e.Start(":9090"))
 }
 
+// Create DB
 func initDB(filepath string) *sql.DB {
 	db, err := sql.Open("sqlite3", filepath)
 
